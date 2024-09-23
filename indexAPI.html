@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Style -->
+    <link rel="stylesheet" href="css/style.css">
+    <title>Login Page</title>
+  </head>
+  <body>
+  
+  <div class="content"> 
+   <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
+            <div class="col-md-12">
+              <div class="form-block shadow-lg">
+                <div class="mb-4">
+                  <div class="row">
+                    <div class="col-4">
+                      <img src="images/LOGO.png" style="height:  65px; display: block;">
+                    </div>
+                    <div class="col-8">
+                      <b id="login_font">Register to API</b>
+                      <p class="mb-4">Application Programming Interface</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <form id="registerForm">
+                  <div class="form-group first">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" class="form-control" id="companyName">
+                  </div>
+
+                  <div class="form-group first">
+                    <label for="Name">Name</label>
+                    <input type="text" class="form-control" id="Name">
+                  </div>
+
+                  <div class="form-group first">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email">
+                  </div>
+
+                  <div class="form-group last mb-4">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password">
+                  </div>
+
+                  <div class="form-group last mb-4">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" class="form-control" id="password2">
+                  </div>
+                  
+                  <div class="d-flex mb-5 align-items-center">
+                    <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
+                      <input type="checkbox" checked="checked"/>
+                      <div class="control__indicator"></div>
+                    </label>
+                    <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span> 
+                  </div>
+
+                  <input type="submit" value="Register" class="btn btn-pill text-white btn-block custom-button">
+                  
+                  <span class="d-block text-center my-4 text-muted">© 2024 NAYSA - Solutions Incorporated. All rights reserved.</span>
+                </form>
+
+                <!-- Placeholder for displaying the API response -->
+                <div id="apiResponse"></div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      // Collect form data
+      const companyName = document.getElementById('companyName').value;
+      const name = document.getElementById('Name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const password2 = document.getElementById('password2').value;
+
+      // Validate password match
+      if (password !== password2) {
+        document.getElementById('apiResponse').innerText = "Passwords do not match!";
+        return;
+      }
+
+      // Prepare data for API request
+      const data = {
+        company_name: companyName,
+        name: name,
+        email: email,
+        password: password
+      };
+
+      try {
+        // Make an API request
+        const response = await fetch('http://nsiacctg-001-site9.atempurl.com/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        // Display API response
+        if (response.ok) {
+          document.getElementById('apiResponse').innerHTML = `<p class="text-success">Success: ${result.message}</p>`;
+        } else {
+          document.getElementById('apiResponse').innerHTML = `<p class="text-danger">Error: ${result.message}</p>`;
+        }
+      } catch (error) {
+        // Handle errors
+        document.getElementById('apiResponse').innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+      }
+    });
+  </script>
+  
+  </body>
+</html>
